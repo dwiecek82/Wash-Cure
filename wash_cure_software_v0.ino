@@ -10,14 +10,53 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+// TextSize(1) - szerokość 6px, wysokość 8px, TextSize(2) - szerokość 12px, wysokość 16px, TextSize(3) - szerokość 18px, wysokość 24px
+
 // Button pins
 int btn_up = 15;
 int btn_down = 16;
 int btn_right = 17;
 int btn_left = 14;
+int menu_num = 10;
 
 // version number
 String ver = "1.0";
+
+// menu selector
+void menu_selection(int x){
+  menu_num = menu_num + x;
+  if(menu_num / 10 < 1){
+    menu_num = 30;
+  }
+  else if (menu_num / 10 > 3){
+    menu_num = 10;
+  }
+  else if (menu_num % 10 > 2){
+    menu_num = menu_num / 10 + 2;
+  }
+  else if (menu_num % 10 == 9){
+    menu_num = menu_num / 10 + 1;
+  }
+  return menu_num;
+}
+
+// proper menu selecting
+void display_selection(){
+  if(menu_num == 10){
+    menu_1();
+  }
+  else if(menu_num == 20){
+    menu_2();
+  }
+  else if(menu_num == 30){
+    menu_3();
+  }
+  else if(menu_num == 11){
+    menu_wash();
+  }
+}
+
+
 
 void showMessage(const char* message) {
   display.clearDisplay();
@@ -28,6 +67,7 @@ void showMessage(const char* message) {
   display.display();
 }
 
+// screen with WASH lightened
 void menu_1() {
   display.clearDisplay();
   display.fillRoundRect(0, 0, 128, 21, 2, WHITE);
@@ -43,6 +83,7 @@ void menu_1() {
   display.display();
 }
 
+//screen with CURE lightened
 void menu_2() {
   display.clearDisplay();
   display.setTextSize(2);
@@ -59,8 +100,9 @@ void menu_2() {
   display.display();
 }
 
+//screen with SETTINGS lightened
 void menu_3() {
-   display.clearDisplay();
+  display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(5, 3);
@@ -73,6 +115,16 @@ void menu_3() {
   display.setCursor(5, 45);
   display.println("SETTINGS");
   display.display(); 
+}
+
+//WASH menu
+void menu_wash(){
+  display.clearDisplay();
+  display.setTextSize(3);
+  display.setTextColor(WHITE);
+  display.setCursor(28, 0);
+  display.println("WASH");
+  display.display();
 }
 
 void setup() {
@@ -96,42 +148,43 @@ void setup() {
   display.display();
   delay(5000);
 
+  menu_1();
 
   // Button pin modes
-  pinMode(btn_up, INPUT_PULLUP);
-  pinMode(btn_down, INPUT_PULLUP);
-  pinMode(btn_right, INPUT_PULLUP);
-  pinMode(btn_left, INPUT_PULLUP);
+  pinMode(btn_up, INPUT);
+  pinMode(btn_down, INPUT);
+  pinMode(btn_right, INPUT);
+  pinMode(btn_left, INPUT);
+
 }
 
 void loop() {
-  menu_1();
-  delay(1000);
-  menu_2();
-  delay(1000);
-  menu_3();
-  delay(1000);
 
-  // if (digitalRead(btn_up) == LOW) {
-  //   showMessage("UP");
-  //   Serial.println("UP");
-  //   while (digitalRead(btn_up) == LOW) {}
-  // }
-  // else if (digitalRead(btn_down) == LOW) {
-  //   showMessage("DOWN");
-  //   Serial.println("DOWN");
-  //   while (digitalRead(btn_down) == LOW) {}
-  // }
-  // else if (digitalRead(btn_right) == LOW) {
-  //   showMessage("RIGHT");
-  //   Serial.println("RIGHT");
-  //   while (digitalRead(btn_right) == LOW) {}
-  // }
-  // else if (digitalRead(btn_left) == LOW) {
-  //   showMessage("LEFT");
-  //   Serial.println("LEFT");
-  //   while (digitalRead(btn_left) == LOW) {}
-  // }
 
-  // delay(100); // debounce
+  if (digitalRead(btn_up) == LOW) {
+    menu_selection(-10);
+    display_selection();
+    Serial.println("UP");
+    while (digitalRead(btn_up) == LOW) {}
+  }
+  else if (digitalRead(btn_down) == LOW) {
+    menu_selection(10);
+    display_selection();
+    Serial.println("DOWN");
+    while (digitalRead(btn_down) == LOW) {}
+  }
+  else if (digitalRead(btn_right) == LOW) {
+    menu_selection(1);
+    display_selection();
+    Serial.println("RIGHT");
+    while (digitalRead(btn_right) == LOW) {}
+  }
+  else if (digitalRead(btn_left) == LOW) {
+    menu_selection(-1);
+    display_selection();
+    Serial.println("LEFT");
+    while (digitalRead(btn_left) == LOW) {}
+  }
+
+  delay(100); // debounce
 }
