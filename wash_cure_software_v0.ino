@@ -17,42 +17,51 @@ int btn_up = 15;
 int btn_down = 16;
 int btn_right = 17;
 int btn_left = 14;
-int menu_num = 10;
+int menu_num = 1;
+int submenu_num = 0;
 
 // version number
 String ver = "1.0";
 
 // menu selector
-void menu_selection(int x){
-  menu_num = menu_num + x;
-  if(menu_num / 10 < 1){
-    menu_num = 30;
+void menu_selection(int x, int y){
+  if(submenu_num == 0){
+    menu_num = menu_num + x;
   }
-  else if (menu_num / 10 > 3){
-    menu_num = 10;
+  if(menu_num < 1){
+    menu_num = 3;
   }
-  else if (menu_num % 10 > 2){
-    menu_num = menu_num / 10 + 2;
+  else if (menu_num > 3){
+    menu_num = 1;
   }
-  else if (menu_num % 10 == 9){
-    menu_num = menu_num / 10 + 1;
+  if (y == 1){
+    submenu_num = menu_num;
   }
-  return menu_num;
+  else if (y == -1){
+    submenu_num = 0;
+  }
+  return menu_num, submenu_num;
 }
 
 // proper menu selecting
 void display_selection(){
-  if(menu_num == 10){
+  if(menu_num == 1 && submenu_num == 0){
     menu_1();
   }
-  else if(menu_num == 20){
+  else if(menu_num == 2 && submenu_num == 0){
     menu_2();
   }
-  else if(menu_num == 30){
+  else if(menu_num == 3 && submenu_num == 0){
     menu_3();
   }
-  else if(menu_num == 11){
+  else if(submenu_num == 1){
     menu_wash();
+  }
+  else if(submenu_num == 2){
+    menu_cure();
+  }
+  else if(submenu_num == 3){
+    menu_settings();
   }
 }
 
@@ -66,6 +75,8 @@ void showMessage(const char* message) {
   display.println(message);
   display.display();
 }
+
+// #####################################################FUNCTIONS FOR DISPLAY SCREENS################################################
 
 // screen with WASH lightened
 void menu_1() {
@@ -120,12 +131,33 @@ void menu_3() {
 //WASH menu
 void menu_wash(){
   display.clearDisplay();
-  display.setTextSize(3);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
-  display.setCursor(28, 0);
+  display.setCursor(40, 0);
   display.println("WASH");
   display.display();
 }
+
+//CURE menu
+void menu_cure(){
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(40, 0);
+  display.println("CURE");
+  display.display();
+}
+
+//SETTINGS menu
+void menu_settings(){
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(16, 0);
+  display.println("SETTINGS");
+  display.display();
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -162,25 +194,25 @@ void loop() {
 
 
   if (digitalRead(btn_up) == LOW) {
-    menu_selection(-10);
+    menu_selection(-1, 0);
     display_selection();
     Serial.println("UP");
     while (digitalRead(btn_up) == LOW) {}
   }
   else if (digitalRead(btn_down) == LOW) {
-    menu_selection(10);
+    menu_selection(1, 0);
     display_selection();
     Serial.println("DOWN");
     while (digitalRead(btn_down) == LOW) {}
   }
   else if (digitalRead(btn_right) == LOW) {
-    menu_selection(1);
+    menu_selection(0, 1);
     display_selection();
     Serial.println("RIGHT");
     while (digitalRead(btn_right) == LOW) {}
   }
   else if (digitalRead(btn_left) == LOW) {
-    menu_selection(-1);
+    menu_selection(0, -1);
     display_selection();
     Serial.println("LEFT");
     while (digitalRead(btn_left) == LOW) {}
