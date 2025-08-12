@@ -76,7 +76,7 @@ void showMessage(const char* message) {
   display.display();
 }
 
-// #####################################################FUNCTIONS FOR DISPLAY SCREENS################################################
+// ##################################################### FUNCTIONS FOR DISPLAY SCREENS ################################################
 
 // screen with WASH lightened
 void menu_1() {
@@ -133,8 +133,12 @@ void menu_wash(){
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(WHITE);
-  display.setCursor(40, 0);
+  display.setCursor(40, 5);
   display.println("WASH");
+  display.setCursor(5,25);
+  display.println("Time: ");
+  display.fillTriangle(20, 63, 28, 50, 36, 63, WHITE);
+  display.fillTriangle(92, 50, 100, 63, 108, 50, WHITE);
   display.display();
 }
 
