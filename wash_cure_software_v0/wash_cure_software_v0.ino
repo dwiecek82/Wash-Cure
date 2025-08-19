@@ -17,8 +17,16 @@ int btn_up = 15;
 int btn_down = 16;
 int btn_right = 17;
 int btn_left = 14;
+
+// variables
 int menu_num = 1;
 int submenu_num = 0;
+bool wash_function = 0;
+bool cure_function = 0;
+int wash_time[2] = {0, 30};
+int cure_time[2] = {0, 30};
+String display_time = "";
+
 
 // version number
 String ver = "1.0";
@@ -34,11 +42,31 @@ void menu_selection(int x, int y){
   else if (menu_num > 3){
     menu_num = 1;
   }
-  if (y == 1){
+  if (y == 1 && submenu_num == 0){
     submenu_num = menu_num;
   }
   else if (y == -1){
     submenu_num = 0;
+  }
+  if (x == -1 && submenu_num == 1 && wash_function == 0){ // setting wash time up
+    wash_time[1] = wash_time[1] + 30;
+    if (wash_time[1] >= 60){
+      wash_time[0] = wash_time[0]+1;
+      wash_time[1] = 0;
+    }
+    string_creator(wash_time[0], wash_time[1]);
+  }
+  if (x == 1 && submenu_num == 1 && wash_function == 0){  // settings wash time down
+    wash_time[1] = wash_time[1] - 30;
+    if (wash_time[1] < 0){
+      wash_time[0] = wash_time[0] - 1;
+      wash_time[1] = 30;
+      if (wash_time[0] < 0){
+        wash_time[0] = 0;
+        wash_time[1] = 0;
+      }
+    }
+    string_creator(wash_time[0], wash_time[1]);
   }
   return menu_num, submenu_num;
 }
@@ -65,7 +93,22 @@ void display_selection(){
   }
 }
 
+// creating string from list to display as time
+void string_creator(int x, int y){
+  String sec = String(y);
+  if (sec == "0"){
+    sec = "00";
+  }
+  String min = String(x);
+  display_time = min + ":"+ sec;
+  return(display_time);
+}
 
+// modifying time variable
+void time_modify(int x, String y){
+  //TODO
+
+}
 
 void showMessage(const char* message) {
   display.clearDisplay();
@@ -136,7 +179,8 @@ void menu_wash(){
   display.setCursor(40, 5);
   display.println("WASH");
   display.setCursor(5,25);
-  display.println("Time: ");
+  display.print("Time ");
+  display.println(display_time);
   display.fillTriangle(20, 63, 28, 50, 36, 63, WHITE);
   display.fillTriangle(92, 50, 100, 63, 108, 50, WHITE);
   display.display();
@@ -185,6 +229,7 @@ void setup() {
   delay(5000);
 
   menu_1();
+  string_creator(wash_time[0], wash_time[1]);
 
   // Button pin modes
   pinMode(btn_up, INPUT);
