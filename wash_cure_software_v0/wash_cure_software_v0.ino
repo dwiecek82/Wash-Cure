@@ -31,6 +31,37 @@ String display_time = "";
 // version number
 String ver = "1.0";
 
+// button press function
+void button_press(){
+  if (digitalRead(btn_up) == LOW) {
+    menu_selection(-1, 0);
+    display_selection();
+    Serial.println("UP");
+    while (digitalRead(btn_up) == LOW) {}
+  }
+  else if (digitalRead(btn_down) == LOW) {
+    menu_selection(1, 0);
+    display_selection();
+    Serial.println("DOWN");
+    while (digitalRead(btn_down) == LOW) {}
+  }
+  else if (digitalRead(btn_right) == LOW) {
+    menu_selection(0, 1);
+    display_selection();
+    Serial.println("RIGHT");
+    while (digitalRead(btn_right) == LOW) {}
+  }
+  else if (digitalRead(btn_left) == LOW) {
+    menu_selection(0, -1);
+    display_selection();
+    Serial.println("LEFT");
+    while (digitalRead(btn_left) == LOW) {}
+  }
+
+  delay(100); // debounce
+}
+
+
 // menu selector
 void menu_selection(int x, int y){
   if(submenu_num == 0){
@@ -241,31 +272,6 @@ void setup() {
 
 void loop() {
 
+  button_press();
 
-  if (digitalRead(btn_up) == LOW) {
-    menu_selection(-1, 0);
-    display_selection();
-    Serial.println("UP");
-    while (digitalRead(btn_up) == LOW) {}
-  }
-  else if (digitalRead(btn_down) == LOW) {
-    menu_selection(1, 0);
-    display_selection();
-    Serial.println("DOWN");
-    while (digitalRead(btn_down) == LOW) {}
-  }
-  else if (digitalRead(btn_right) == LOW) {
-    menu_selection(0, 1);
-    display_selection();
-    Serial.println("RIGHT");
-    while (digitalRead(btn_right) == LOW) {}
-  }
-  else if (digitalRead(btn_left) == LOW) {
-    menu_selection(0, -1);
-    display_selection();
-    Serial.println("LEFT");
-    while (digitalRead(btn_left) == LOW) {}
-  }
-
-  delay(100); // debounce
 }
