@@ -7,8 +7,8 @@ int menu_num = 1;
 int submenu_num = 0;
 bool wash_function = 0;
 bool cure_function = 0;
-int wash_time[2] = {0, 30};
-int cure_time[2] = {0, 30};
+int wash_time = 30;
+int cure_time = 30;
 String display_time = "";
 
 
@@ -51,14 +51,22 @@ void button_press(){
 // function for navigation while pressing button
 void menu_selection(int x, int y) {
   // selection in main menu
-  if (submenu_num == 0){
+  if (submenu_num == 0){   //main menu navigation
     menu_num += x;        // moving up and down in main menu
-    if (menu_num > 3){    // when exceed then go to begining 
-    menu_num = 1;
+    if (menu_num > 3){menu_num = 1;}         // when setting value greater than 3, then go to begining  
+    else if (menu_num < 1){menu_num = 3;}    // when setting value lower than 1, then go to end to create a loop
+  }
+  else if (submenu_num == 1){
+    if (menu_num == 1){
+      wash_time = wash_time - 5 * x;   // increasing/decreassing wash_time by 5s every button press
     }
-  else if (menu_num < 1){   
-    menu_num = 3;
+    else if (menu_num == 2){
+      cure_time = cure_time - 5 * x;   // increasing/decreassing cure_time by 5s every button press
     }
+
+  }
+  else if (submenu_num == 2){
+    //TODO  adding and subtracting engines speed
   }
   submenu_num += y;   // moving left and right in menu
   if (submenu_num > 2){submenu_num = 2;}        // interupt setting submenu_num above 2
