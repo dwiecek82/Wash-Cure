@@ -82,12 +82,17 @@ void menu_wash(String display_time){
 }
 
 //CURE menu
-void menu_cure(){
+void menu_cure(String display_time){
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(WHITE);
-  display.setCursor(40, 0);
+  display.setCursor(40, 5);
   display.println("CURE");
+  display.setCursor(5,25);
+  display.print("Time ");
+  display.println(display_time);
+  display.fillTriangle(20, 63, 28, 50, 36, 63, WHITE);
+  display.fillTriangle(92, 50, 100, 63, 108, 50, WHITE);
   display.display();
 }
 
@@ -116,3 +121,42 @@ void begin_screen(){
   delay(5000);
 }
 
+void washing(String display_time, String display_speed){
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(4, 5);
+  display.println("WASHING...");
+  display.setCursor(5,24);
+  display.print("Time ");
+  display.println(display_time);
+  display.fillTriangle(2, 63, 10, 50, 18, 63, WHITE);
+  display.fillTriangle(20, 50, 28, 63, 36, 50, WHITE);
+  display.setCursor(42, 50);
+  display.setTextSize(1);
+  display.print("Speed:");
+  display.setTextSize(2);
+  display.setCursor(78, 50);
+  display.println(display_speed);
+  display.display();
+}
+
+void curing(String display_time, String display_speed){
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(10, 5);
+  display.println("CURING...");
+  display.setCursor(5,24);
+  display.print("Time ");
+  display.println(display_time);
+  display.fillTriangle(2, 63, 10, 50, 18, 63, WHITE);
+  display.fillTriangle(20, 50, 28, 63, 36, 50, WHITE);
+  display.setCursor(42, 50);
+  display.setTextSize(1);
+  display.print("Speed:");
+  display.setTextSize(2);
+  display.setCursor(78, 50);
+  display.println(display_speed);
+  display.display();
+}
