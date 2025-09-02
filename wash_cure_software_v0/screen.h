@@ -22,9 +22,11 @@ void menu_1();
 void menu_2();
 void menu_3();
 void menu_wash(String display_time);
-void menu_cure();
+void menu_cure(String display_time);
 void menu_settings();
 void begin_screen();
+void washing(String display_time, String display_speed);
+void curing(String display_time, String display_speed);
 
 
 #endif  

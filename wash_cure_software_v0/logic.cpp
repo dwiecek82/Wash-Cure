@@ -10,6 +10,9 @@ bool cure_function = 0;
 int wash_time = 30;
 int cure_time = 30;
 String display_time = "";
+int wash_speed = 50;
+int cure_speed = 50;
+String display_speed = "50%";
 
 
 
@@ -58,16 +61,25 @@ void menu_selection(int x, int y) {
   }
   else if (submenu_num == 1){
     if (menu_num == 1){
-      wash_time = wash_time - 5 * x;   // increasing/decreassing wash_time by 5s every button press
+      wash_time = wash_time - 10 * x;   // increasing/decreassing wash_time by 10s every button press
     }
     else if (menu_num == 2){
-      cure_time = cure_time - 5 * x;   // increasing/decreassing cure_time by 5s every button press
+      cure_time = cure_time - 10 * x;   // increasing/decreassing cure_time by 10s every button press
     }
-    if (wash_time < 0){wash_time = 0;}  //not allowing wash_time to be set below 0
-    if (cure_time <0 ){cure_time = 0;}  // not allowing cure_time to be set below 0
+    if (wash_time < 0){wash_time = 0;}  // not allowing wash_time to be set below 0
+    if (cure_time < 0){cure_time = 0;}  // not allowing cure_time to be set below 0
   }
   else if (submenu_num == 2){
-    //TODO  adding and subtracting engines speed
+    if (menu_num == 1){
+      wash_speed = wash_speed - 5 * x;  // increasing/decreasing wash_speed by 5 % every up/down pressed
+      if(wash_speed > 100){wash_speed = 100;}
+      else if(wash_speed < 10){wash_speed = 10;}
+    }
+    else if (menu_num == 2){
+      cure_speed = cure_speed - 5 * x;  // increasing/decreasing cure_speed by 5 % every up/down pressed
+      if(cure_speed > 100){cure_speed = 100;}     // not allowing cure_speed to be set above 100
+      else if(cure_speed < 10){cure_speed = 10;}  // not allowing cure_speed to be set below 10
+    }
   }
   submenu_num += y;   // moving left and right in menu
   if (submenu_num > 2){submenu_num = 2;}        // interupt setting submenu_num above 2
@@ -87,16 +99,44 @@ void display_selection(){
   else if (submenu_num == 1){
     if (menu_num == 1){
       display_time = time_format_str(wash_time);
-      menu_wash(time_format_str(wash_time));
+      menu_wash(display_time);
       }
-    else if (menu_num == 2){menu_cure();}
+    else if (menu_num == 2){
+      display_time = time_format_str(cure_time);
+      menu_cure(display_time);
+      }
     else if (menu_num == 3){menu_settings();}
+  }
+  else if (submenu_num == 2){
+    if (menu_num == 1){
+      display_time = time_format_str(wash_time);
+      display_speed = percentage_format_str(wash_speed);
+      washing(display_time, display_speed);
+    }
+    else if (menu_num == 2){
+      display_time = time_format_str(cure_time);
+      display_speed = percentage_format_str(cure_speed);
+      curing(display_time, display_speed);
+    }
   }
 }
 
 //converting to time format and returning result
 String time_format_str(int time){
-  String result = String(time / 60) + ":" + String(time % 60);
+  String x = "";
+  String y = "";
+  if((time / 60) < 10){x = "0" + String(time / 60);}  // adding "0" if there is only one diggit
+  else {x = String(time / 60);}
+  if((time % 60) < 10){y = "0" + String(time % 60);}  // adding "0" if there is only one diggit
+  else {y = String(time % 60);}
+  String result = x + ":" + y;  // putting together minuts and seconds
   return(result);
+}
+
+
+// convert percentage int to displayed String
+String percentage_format_str(int per){
+  String result = String(per)+"%";
+  return result;
 
 }
