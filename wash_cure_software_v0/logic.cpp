@@ -63,7 +63,8 @@ void menu_selection(int x, int y) {
     else if (menu_num == 2){
       cure_time = cure_time - 5 * x;   // increasing/decreassing cure_time by 5s every button press
     }
-
+    if (wash_time < 0){wash_time = 0;}  //not allowing wash_time to be set below 0
+    if (cure_time <0 ){cure_time = 0;}  // not allowing cure_time to be set below 0
   }
   else if (submenu_num == 2){
     //TODO  adding and subtracting engines speed
@@ -84,8 +85,18 @@ void display_selection(){
   }
   //submenu display
   else if (submenu_num == 1){
-    if (menu_num == 1){menu_wash();}
+    if (menu_num == 1){
+      display_time = time_format_str(wash_time);
+      menu_wash(time_format_str(wash_time));
+      }
     else if (menu_num == 2){menu_cure();}
     else if (menu_num == 3){menu_settings();}
   }
+}
+
+//converting to time format and returning result
+String time_format_str(int time){
+  String result = String(time / 60) + ":" + String(time % 60);
+  return(result);
+
 }

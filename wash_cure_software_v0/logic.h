@@ -16,5 +16,5 @@ void button_press(); //button press handling
 void button_init();
 void menu_selection(int x, int y);
 void display_selection();
-
+String time_format_str(int time);
 #endif

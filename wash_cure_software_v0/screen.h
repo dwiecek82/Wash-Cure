@@ -21,7 +21,7 @@ void init_display();
 void menu_1();
 void menu_2();
 void menu_3();
-void menu_wash();
+void menu_wash(String display_time);
 void menu_cure();
 void menu_settings();
 void begin_screen();

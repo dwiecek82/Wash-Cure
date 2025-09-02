@@ -67,7 +67,7 @@ void menu_3() {
 }
 
 //WASH menu
-void menu_wash(){
+void menu_wash(String display_time){
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(WHITE);
@@ -75,7 +75,7 @@ void menu_wash(){
   display.println("WASH");
   display.setCursor(5,25);
   display.print("Time ");
-  display.println("display_time");
+  display.println(display_time);
   display.fillTriangle(20, 63, 28, 50, 36, 63, WHITE);
   display.fillTriangle(92, 50, 100, 63, 108, 50, WHITE);
   display.display();
