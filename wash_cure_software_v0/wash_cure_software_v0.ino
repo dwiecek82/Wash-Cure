@@ -12,42 +12,5 @@ void setup(){
 
 void loop(){
   button_press(); //button handling function
+  proccess_check();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void setup() {
-
-
-//   menu_1();
-//   string_creator(wash_time[0], wash_time[1]);
-
-
-
-// }
-
-// void loop() {
-
-//   
-
-// }

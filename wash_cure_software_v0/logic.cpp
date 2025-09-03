@@ -13,6 +13,8 @@ String display_time = "";
 int wash_speed = 50;
 int cure_speed = 50;
 String display_speed = "50%";
+unsigned long currentMillis = 0;
+unsigned long previousMillis = 0;
 
 
 
@@ -140,3 +142,23 @@ String percentage_format_str(int per){
   return result;
 
 }
+
+// function counting down time for washing process
+void countdown_wash(){
+  currentMillis = millis();
+  if (currentMillis-previousMillis >= 1000){      // checks if 1 second has past since last one
+    wash_time -= 1;                               // subtracts 1 from time remaining of wash
+    previousMillis = currentMillis;
+  }
+  if (wash_time <= 0){submenu_num = 1;}   // when count down runs down to 0 then changing to first level submenu
+}
+
+// function checking status of process running on mashine
+void proccess_check(){
+  if (submenu_num == 2 && menu_num == 1){   //checks if wash process is selected for running
+    countdown_wash();
+    menu_selection(0,0);    //run menu_selection function with 0 parameters to change timer on display
+    //TODO   here isert functions to run during wash proccess
+  }
+}
+
