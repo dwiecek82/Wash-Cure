@@ -144,21 +144,24 @@ String percentage_format_str(int per){
 }
 
 // function counting down time for washing process
-void countdown_wash(){
+void countdown(int &time){      // &time tells compiller not to create new variable and operate on origin one. So if i input countdown(cure_time); then it will count down from cure_time
   currentMillis = millis();
   if (currentMillis-previousMillis >= 1000){      // checks if 1 second has past since last one
-    wash_time -= 1;                               // subtracts 1 from time remaining of wash
+    time -= 1;                               // subtracts 1 from time remaining of wash
     previousMillis = currentMillis;
   }
-  if (wash_time <= 0){submenu_num = 1;}   // when count down runs down to 0 then changing to first level submenu
+  if (time <= 0){submenu_num = 1;}   // when count down runs down to 0 then changing to first level submenu
 }
 
 // function checking status of process running on mashine
 void proccess_check(){
   if (submenu_num == 2 && menu_num == 1){   //checks if wash process is selected for running
-    countdown_wash();
+    countdown(wash_time);
     menu_selection(0,0);    //run menu_selection function with 0 parameters to change timer on display
-    //TODO   here isert functions to run during wash proccess
+  }
+  if (submenu_num == 2 && menu_num == 2){
+    countdown(cure_time);
+    menu_selection(0,0);
   }
 }
 

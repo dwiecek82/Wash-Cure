@@ -17,7 +17,7 @@ void menu_selection(int x, int y);
 void display_selection();
 String time_format_str(int time);
 String percentage_format_str(int per);
-void countdown_wash();
+void countdown(int &time);
 void proccess_check();
 
 #endif
