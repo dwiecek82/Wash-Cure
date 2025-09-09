@@ -16,6 +16,7 @@ String display_speed = "50%";
 unsigned long currentMillis = 0;
 unsigned long previousMillis = 0;
 bool UV_status = false; 
+bool stirrer_status = false;
 
 
 
@@ -26,6 +27,7 @@ void pins_init(){
   pinMode(btn_right, INPUT);
   pinMode(btn_left, INPUT);
   pinMode(UV_relay_sig, OUTPUT);
+  pinMode(stirrer_motor_sig, OUTPUT);
 }
 
 
@@ -102,6 +104,7 @@ void display_selection(){
   }
   //submenu display
   else if (submenu_num == 1){
+    switch_off();     // switch off periferials when interupting processes
     if (menu_num == 1){
       display_time = time_format_str(wash_time);
       menu_wash(display_time);
@@ -127,23 +130,21 @@ void display_selection(){
 }
 
 //converting to time format and returning result
-String time_format_str(int time){
-  String x = "";
-  String y = "";
-  if((time / 60) < 10){x = "0" + String(time / 60);}  // adding "0" if there is only one diggit
-  else {x = String(time / 60);}
-  if((time % 60) < 10){y = "0" + String(time % 60);}  // adding "0" if there is only one diggit
-  else {y = String(time % 60);}
-  String result = x + ":" + y;  // putting together minuts and seconds
+String time_format_str(int total_sec){
+  String min = "";
+  String sec = "";
+  if((total_sec / 60) < 10){min = "0" + String(total_sec / 60);}  // adding "0" if there is only one digit
+  else {min = String(total_sec / 60);}
+  if((total_sec % 60) < 10){sec = "0" + String(total_sec % 60);}  // adding "0" if there is only one digit
+  else {sec = String(total_sec % 60);}
+  String result = min + ":" + sec;  // putting together minuts and seconds
   return(result);
 }
-
 
 // convert percentage int to displayed String
 String percentage_format_str(int per){
   String result = String(per)+"%";
   return result;
-
 }
 
 // function counting down time for washing process
@@ -160,9 +161,10 @@ void countdown(int &time){      // &time tells compiller not to create new varia
 void proccess_check(){
   if (submenu_num == 2 && menu_num == 1){   //checks if wash process is selected for running
     countdown(wash_time);
+    magnetic_stirrer();
     menu_selection(0,0);    //run menu_selection function with 0 parameters to change timer on display
   }
-  if (submenu_num == 2 && menu_num == 2){
+  if (submenu_num == 2 && menu_num == 2){   //checks if cure process is selected for running
     countdown(cure_time);
     UV_relay();
     menu_selection(0,0);
@@ -171,16 +173,26 @@ void proccess_check(){
 
 // function handling UV light relay
 void UV_relay(){
-  if(submenu_num == 2 && menu_num == 2 && UV_status == false){
+  if(submenu_num == 2 && UV_status == false){    // switching on UV light when entering curing process
     digitalWrite(UV_relay_sig, HIGH);
     Serial.println("włączono UV");
     UV_status = true;
   }
-  else if(submenu_num != 2) {
-    digitalWrite(UV_relay_sig, LOW);
-    UV_status = false;
-    Serial.println("wyłączono UV");
-    }
 }
 
 // magnetic stirrer handling function
+void magnetic_stirrer(){
+  if(submenu_num == 2 && stirrer_status == false){
+    stirrer_status = true;
+    Serial.println("stirrer on");
+  }
+}
+
+// switch off function for all periferials: UV_led, stirrer engine, plate stepper motor. It is called every time submenu_num = 1
+void switch_off(){
+  digitalWrite(UV_relay_sig, LOW);
+  UV_status = false;
+  stirrer_status = false;
+  Serial.println("all periferials off");
+  //TODO stirrer and stepper off
+}
