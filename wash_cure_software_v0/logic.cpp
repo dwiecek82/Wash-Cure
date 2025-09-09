@@ -190,9 +190,14 @@ void magnetic_stirrer(){
 
 // switch off function for all periferials: UV_led, stirrer engine, plate stepper motor. It is called every time submenu_num = 1
 void switch_off(){
-  digitalWrite(UV_relay_sig, LOW);
-  UV_status = false;
-  stirrer_status = false;
-  Serial.println("all periferials off");
+  if(UV_status == true){
+    digitalWrite(UV_relay_sig, LOW);
+    UV_status = false;
+    Serial.println("UV light off");
+  }
+  if(stirrer_status == true){
+    stirrer_status = false;
+    Serial.println("stirrer off");
+  }
   //TODO stirrer and stepper off
 }
