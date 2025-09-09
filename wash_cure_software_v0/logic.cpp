@@ -15,16 +15,19 @@ int cure_speed = 50;
 String display_speed = "50%";
 unsigned long currentMillis = 0;
 unsigned long previousMillis = 0;
+bool UV_status = false; 
 
 
 
 // buttons initialization, set for input becouse there are pullup resistors connected to switches
-void button_init(){
+void pins_init(){
   pinMode(btn_up, INPUT);
   pinMode(btn_down, INPUT);
   pinMode(btn_right, INPUT);
   pinMode(btn_left, INPUT);
+  pinMode(UV_relay_sig, OUTPUT);
 }
+
 
 
 
@@ -161,7 +164,23 @@ void proccess_check(){
   }
   if (submenu_num == 2 && menu_num == 2){
     countdown(cure_time);
+    UV_relay();
     menu_selection(0,0);
   }
 }
 
+// function handling UV light relay
+void UV_relay(){
+  if(submenu_num == 2 && menu_num == 2 && UV_status == false){
+    digitalWrite(UV_relay_sig, HIGH);
+    Serial.println("włączono UV");
+    UV_status = true;
+  }
+  else if(submenu_num != 2) {
+    digitalWrite(UV_relay_sig, LOW);
+    UV_status = false;
+    Serial.println("wyłączono UV");
+    }
+}
+
+// magnetic stirrer handling function
