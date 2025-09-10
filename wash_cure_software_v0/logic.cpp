@@ -19,7 +19,6 @@ bool UV_status = false;
 bool stirrer_status = false;
 
 
-
 // buttons initialization, set for input becouse there are pullup resistors connected to switches
 void pins_init(){
   pinMode(btn_up, INPUT);
@@ -29,9 +28,6 @@ void pins_init(){
   pinMode(UV_relay_sig, OUTPUT);
   pinMode(stirrer_motor_sig, OUTPUT);
 }
-
-
-
 
 // button press function
 void button_press(){
@@ -81,6 +77,7 @@ void menu_selection(int x, int y) {
       wash_speed = wash_speed - 5 * x;  // increasing/decreasing wash_speed by 5 % every up/down pressed
       if(wash_speed > 100){wash_speed = 100;}
       else if(wash_speed < 10){wash_speed = 10;}
+      if(x != 0){stirrer_status = false;}                // allow for speed change in stirrer function when up or down are pressed
     }
     else if (menu_num == 2){
       cure_speed = cure_speed - 5 * x;  // increasing/decreasing cure_speed by 5 % every up/down pressed
@@ -184,8 +181,14 @@ void UV_relay(){
 void magnetic_stirrer(){
   if(submenu_num == 2 && stirrer_status == false){
     stirrer_status = true;
-    Serial.println("stirrer on");
+    analogWrite(stirrer_motor_sig, map(wash_speed, 0, 100, 0, 255));
+    Serial.println("stirrer on with "+String(wash_speed)+"%");
   }
+}
+
+// rotating platform handling function using stepper motor and ULN2003 driver
+void platform_rotation(){
+  //TODO - sterowanie stepperem
 }
 
 // switch off function for all periferials: UV_led, stirrer engine, plate stepper motor. It is called every time submenu_num = 1
@@ -197,6 +200,7 @@ void switch_off(){
   }
   if(stirrer_status == true){
     stirrer_status = false;
+    analogWrite(stirrer_motor_sig, 0);
     Serial.println("stirrer off");
   }
   //TODO stirrer and stepper off

@@ -23,6 +23,7 @@ void countdown(int &time);
 void proccess_check();
 void UV_relay();
 void magnetic_stirrer();
+void platform_rotation();
 void switch_off();
 
 #endif
